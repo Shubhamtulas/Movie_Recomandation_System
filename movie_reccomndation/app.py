@@ -4,10 +4,14 @@ import requests
 import pickle
 import os
 import time
+from pathlib import Path
 from dotenv import load_dotenv
 
-# Load environment variables
-load_dotenv()
+# Resolve base directory to the folder of this file (works on Streamlit Cloud)
+BASE_DIR = Path(__file__).parent.resolve()
+
+# Load environment variables from a local .env if present (optional locally)
+load_dotenv(BASE_DIR / ".env")
 
 # Helper: load TMDB API key from Streamlit secrets or environment
 def get_tmdb_api_key():
@@ -85,7 +89,8 @@ with st.sidebar:
 
 # Load the processed data and similarity matrix
 try:
-    with open('movie_data.pkl', 'rb') as file:
+    data_path = BASE_DIR / 'movie_data.pkl'
+    with open(data_path, 'rb') as file:
         movies, cosine_sim = pickle.load(file)
 except FileNotFoundError:
     st.error("movie_data.pkl file not found. Please ensure the file exists in the current directory.")
