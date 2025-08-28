@@ -15,13 +15,15 @@ load_dotenv(BASE_DIR / ".env")
 
 # Helper: load TMDB API key from Streamlit secrets or environment
 def get_tmdb_api_key():
+    """Get TMDB API key from secrets or environment variables"""
     try:
-        # Prefer Streamlit secrets in hosted environments
+        # First try Streamlit secrets (for hosted environments)
         if hasattr(st, "secrets") and "TMDB_API_KEY" in st.secrets:
             return st.secrets["TMDB_API_KEY"]
     except Exception:
         pass
-    # Fallback to environment/.env
+    
+    # Fallback to environment variables or .env file
     return os.getenv("TMDB_API_KEY")
 
 # Check for API key and show setup instructions if missing
